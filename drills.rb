@@ -29,10 +29,18 @@ end
   # accepts any number of arguments without error
   # returns the total number of arguments passed to the function
 
+def how_many_args(*arg)
+  arg.count
+end
+
 #find_answer
   # returns the value associated with the 'answer' keyword argument
   # returns nil if it cannot find the 'answer' keyword argument
   # raises an error when given non-keyword arguments
+
+def find_answer(**thing)
+  thing[:answer]
+end
 
 ##############################
 #### MANIPULATING STRINGS ####
@@ -64,24 +72,52 @@ end
   # convert the given message to uppercase
   # adds an exclamation point to the end of the given message
 
+def yell (str)
+  str.upcase + '!'
+end
+
 #to_telegram
   # replaces periods in the input string with ' STOP'
+
+def to_telegram (str)
+  str.gsub(/\./, ' STOP')
+end
 
 #spell_out
   # returns the input string, with characters seperated by dashes
   # converts the input string to lowercase
 
+def spell_out (str)
+  str.downcase.split("").join('-')
+end
+
 #seperate
   # seperates characters in the input string with a custom seperator, when supplied with one
   # seperates characters in the input string with dashes (by default)
+
+def seperate(str, sep='-')
+  str.downcase.split("").join("#{sep}")
+end
 
 #croon
   # seperates characters in each word of the input phrase with dashes
   # preserves whitespace between words
 
+def croon(str)
+  scnd = []
+  str.split(" ").each {|word|
+    scnd.push(word.split("").join('-'))
+  }
+  scnd.join(' ')
+end
+
 #palindrome_word?
   # determines whether a single given word is a palindrome
   # ignores case
+
+def palindrome_word?(str)
+  str.downcase == str.downcase.reverse
+end
 
 #palindrome_sentence?
   # determines whether a given sentence is a palindrome
@@ -89,16 +125,31 @@ end
   # ignores whitespace
   # ignores punctuation
 
+def palindrome_sentence?(str)
+  str.downcase.gsub(/[^a-z]/i, "") == str.downcase.gsub(/[^a-z]/i, "").reverse
+end
+
 #is_vowel
   # determines whether a given character is a vowel
   # ignores case
   # returns false for non-letter inputs
+
+def is_vowel(str)
+  ['a','e','i','o','u','A','E','I','O','U'].include? str
+end
 
 #add_period
   # adds a period to the end of the given sentence
   # does not add a period if one is already there
   # does not add a period if any form of terminal punctuation is present
 
+def add_period(str)
+  if ['.','?','!'].include? str[-1]
+    str
+  else
+    str+'.'
+  end
+end
 
 ###########################
 #### LOOPS & ITERATORS ####
@@ -128,25 +179,52 @@ end
   # removes the last item from an input array
   # removes the last item from an input string
 
+def exclude_last (arr)
+  arr[0...-1]
+end
+
 #exclude_first
   # removes the first item from an input array
   # removes the first character from an input string
   # does not alter the original input (non-destructive)
 
+def exclude_first (arr)
+  arr[1..-1]
+end
+
 #exclude_ends
   # removes the first and last items from an input array
   # removes the first and last characters from an input string
 
+def exclude_ends arr
+  arr[1...-1]
+end
+
 #select_every_even
   # returns an array of even-indexed items from the input array
 
+def select_every_even arr
+  new_arr = []
+  0.step(arr.length, 2).each { |s| new_arr.push(arr[s]) if arr[s]}
+  new_arr
+end
+
 #select_every_odd
   # returns an array of odd-indexed items from the input array
-
+def select_every_odd arr
+  new_arr = []
+  1.step(arr.length, 2).each { |s| new_arr.push(arr[s]) if arr[s]}
+  new_arr
+end
 #select_every_n
   # returns an array of items at an index evenly divisible by n, from the input array
   # defaults to an n value of 1
 
+def select_every_n (arr, n=1)
+  new_arr = []
+  0.step(arr.length-1, n).each { |s| new_arr.push(arr[s]) if arr[s]}
+  new_arr
+end
 
 
 ##############################
@@ -186,7 +264,7 @@ def is_prime? (num)
   return false if num != num.to_i
   return false if num <=1
   Math.sqrt(num).to_i.downto(2).each {|i| return false if num % i == 0}
-else return true
+  true
 end
 
 #primes_less_than
@@ -194,12 +272,27 @@ end
   # does not return the number itself
   # finds all primes less than the given number
 
+def primes_less_than num
+  answer = []
+  (num-1).downto(2).each {|n| answer.push(n) if is_prime? n}
+  answer.reverse
+end
+
 #iterative_factorial
   # returns 1 for 0 and 1
   # returns NaN for numbers less than 0
   # returns NaN for non-integers
   # calculates the factorial of the input number
 
+def iterative_factorial num
+  if num < 0 || (num.to_i != num)
+    Float::NAN
+  elsif num <=1
+    return 1
+  else
+    num.downto(1).inject {|sum, n| sum * n}
+  end
+end
 
 
 ##############################
